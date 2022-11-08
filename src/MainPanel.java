@@ -4,15 +4,12 @@ import java.awt.*;
 
 public class MainPanel extends JPanel {
 
-    private Statusbar statusbar;
-
-    public MainPanel(Statusbar statusbar) {
+    public MainPanel() {
         super(new BorderLayout());
-        this.statusbar = statusbar;
-        CanvasArea canvasArea = new CanvasArea(this.statusbar);
+        CanvasArea canvasArea = new CanvasArea();
         canvasArea.setMinimumSize(new Dimension(300, 30));
 
-        HtmlArea htmlArea = new HtmlArea(this.statusbar);
+        HtmlArea htmlArea = new HtmlArea();
         htmlArea.setMinimumSize(new Dimension(300, 30));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, canvasArea, htmlArea);

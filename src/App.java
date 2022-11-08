@@ -14,9 +14,9 @@ public class App {
         mainFrame.setMinimumSize(new Dimension(frameMinWidth, frameMinHeight));
 
         Statusbar statusbar = new Statusbar();
-        Menubar menubar = new Menubar(statusbar);
-        ToolPanel toolPanel = new ToolPanel(statusbar);
-        MainPanel mainPanel = new MainPanel(statusbar);
+        Menubar menubar = new Menubar();
+        ToolPanel toolPanel = new ToolPanel();
+        MainPanel mainPanel = new MainPanel();
 
         mainFrame.setJMenuBar(menubar);
         mainFrame.getContentPane().add(toolPanel, BorderLayout.NORTH);

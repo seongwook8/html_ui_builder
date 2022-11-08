@@ -13,10 +13,7 @@ import javax.swing.text.StyledDocument;
 
 public class HtmlArea extends JTextPane {
 
-    private Statusbar statusbar;
-
-    public HtmlArea(Statusbar statusbar) {
-        this.statusbar = statusbar;
+    public HtmlArea() {
         List<String> htmlList = getDefaultHtml();
         printHtml(htmlList);
 

@@ -9,12 +9,9 @@ import java.util.*;
 
 public class CanvasArea extends JPanel {
 
-    private Statusbar statusbar;
     private static List<int[]> points = new ArrayList<>();
 
-    public CanvasArea(Statusbar statusbar) {
-        this.statusbar = statusbar;
-
+    public CanvasArea() {
         // addMouseListener(new MouseInputAdapter() {
         // public void mousePressed(MouseEvent e) {
         // statusbar.setStatus("Mouse Pressed");
@@ -23,7 +20,7 @@ public class CanvasArea extends JPanel {
 
         addMouseMotionListener(new MouseInputAdapter() {
             public void mouseDragged(MouseEvent e) {
-                statusbar.setStatus("Mouse Dragged");
+                Statusbar.setStatus("Mouse Dragged");
                 points.add(new int[] { e.getX(), e.getY() });
                 repaint();
             }
