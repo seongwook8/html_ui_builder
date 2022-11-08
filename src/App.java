@@ -13,10 +13,10 @@ public class App {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setMinimumSize(new Dimension(frameMinWidth, frameMinHeight));
 
-        Statusbar statusbar = new Statusbar();
         Menubar menubar = new Menubar();
         ToolPanel toolPanel = new ToolPanel();
         MainPanel mainPanel = new MainPanel();
+        Statusbar statusbar = new Statusbar();
 
         mainFrame.setJMenuBar(menubar);
         mainFrame.getContentPane().add(toolPanel, BorderLayout.NORTH);
