@@ -10,7 +10,7 @@ import java.util.*;
 public class CanvasArea extends JPanel {
 
     private Statusbar statusbar;
-    private List<int[]> points = new ArrayList<>();
+    private static List<int[]> points = new ArrayList<>();
 
     public CanvasArea(Statusbar statusbar) {
         this.statusbar = statusbar;
@@ -42,6 +42,10 @@ public class CanvasArea extends JPanel {
         }
         setBackground(Color.WHITE);
 
+    }
+
+    public static void clearPoints() {
+        points = new ArrayList<>();
     }
 
 }

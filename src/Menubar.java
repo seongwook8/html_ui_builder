@@ -1,5 +1,6 @@
 import javax.swing.JMenuBar;
 import javax.swing.*;
+import java.awt.event.*;
 
 public class Menubar extends JMenuBar {
 
@@ -12,6 +13,10 @@ public class Menubar extends JMenuBar {
         addSave(files);
         addLoad(files);
         addExit(files);
+
+        JMenu edits = new JMenu("Edit");
+        this.add(edits);
+        addClearCanvas(edits);
 
     }
 
@@ -32,6 +37,19 @@ public class Menubar extends JMenuBar {
         JMenuItem exit = new JMenuItem("Exit");
         menu.add(exit);
         exit.addActionListener(e -> System.exit(0));
+    }
+
+    public void addClearCanvas(JMenu menu) {
+        JMenuItem clear = new JMenuItem("Clear Canvas");
+        menu.add(clear);
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CanvasArea.clearPoints();
+                getParent().repaint();
+            }
+        });
+
     }
 
 }
