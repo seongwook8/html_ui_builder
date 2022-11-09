@@ -9,19 +9,22 @@ import java.util.*;
 
 public class CanvasArea extends JPanel {
 
-    private static List<int[]> points = new ArrayList<>();
+    private static List<double[]> points = new ArrayList<>();
 
     public CanvasArea() {
         // addMouseListener(new MouseInputAdapter() {
-        // public void mousePressed(MouseEvent e) {
-        // statusbar.setStatus("Mouse Pressed");
+        // public void mouseClicked(MouseEvent e) {
+        // Statusbar.setStatus("Mouse Clicked");
+        // DollarQ dollarQ = new DollarQ();
+        // points = dollarQ.resample(points, 32);
+        // repaint();
         // }
         // });
 
         addMouseMotionListener(new MouseInputAdapter() {
             public void mouseDragged(MouseEvent e) {
                 Statusbar.setStatus("Mouse Dragged");
-                points.add(new int[] { e.getX(), e.getY() });
+                points.add(new double[] { (double) e.getX(), (double) e.getY(), 0 });
                 repaint();
             }
         });
@@ -32,8 +35,8 @@ public class CanvasArea extends JPanel {
         super.paintComponent(g);
 
         for (int i = 0; i < points.size(); i++) {
-            int x = points.get(i)[0];
-            int y = points.get(i)[1];
+            int x = (int) points.get(i)[0];
+            int y = (int) points.get(i)[1];
             g.setColor(Color.BLACK);
             g.drawLine(x, y, x, y);
         }
