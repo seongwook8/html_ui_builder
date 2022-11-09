@@ -6,10 +6,10 @@ public class DollarQ {
     private int cloudSize = 32;
     private int lutSize = 64;
 
-    private HashMap<String, 
+    private HashMap<String, pointCloud> pointClouds = new HashMap<>();
 
     public DollarQ() {
-
+        int a = 0;
     }
 
     private class pointCloud {
