@@ -1,3 +1,71 @@
+/**
+ * The $Q Super-Quick Recognizer (JavaScript version)
+ *
+ * Javascript version:
+ *
+ *  Nathan Magrofuoco
+ *  Universite Catholique de Louvain
+ *  Louvain-la-Neuve, Belgium
+ *  nathan.magrofuoco@uclouvain.be
+ *
+ * Original $Q authors (C# version):
+ *
+ *  Radu-Daniel Vatavu, Ph.D.
+ *  University Stefan cel Mare of Suceava
+ *  Suceava 720229, Romania
+ *  radu.vatavu@usm.ro
+ *
+ *  Lisa Anthony, Ph.D.
+ *  Department of CISE
+ *  University of Florida
+ *  Gainesville, FL, USA 32611
+ *  lanthony@cise.ufl.edu
+ *
+ *  Jacob O. Wobbrock, Ph.D.
+ *  The Information School | DUB Group
+ *  University of Washington
+ *  Seattle, WA, USA 98195-2840
+ *  wobbrock@uw.edu
+ *
+ * The academic publication for the $Q recognizer, and what should be
+ * used to cite it, is:
+ *
+ *    Vatavu, R.-D., Anthony, L. and Wobbrock, J.O. (2018). $Q: A super-quick,
+ *    articulation-invariant stroke-gesture recognizer for low-resource devices.
+ *    Proceedings of the ACM Conference on Human-Computer Interaction with Mobile
+ *    Devices and Services (MobileHCI '18). Barcelona, Spain (September 3-6, 2018).
+ *    New York: ACM Press. Article No. 23.
+ *    https://dl.acm.org/citation.cfm?id=3229434.3229465
+ *
+ * This software is distributed under the "New BSD License" agreement:
+ *
+ * Copyright (c) 2018-2019, Nathan Magrofuoco, Jacob O. Wobbrock, Radu-Daniel Vatavu,
+ * and Lisa Anthony. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the names of the University Stefan cel Mare of Suceava,
+ *      University of Washington, nor University of Florida, nor the names of its
+ *      contributors may be used to endorse or promote products derived from this
+ *      software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Radu-Daniel Vatavu OR Lisa Anthony
+ * OR Jacob O. Wobbrock BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+**/
 //
 // Point class
 //
