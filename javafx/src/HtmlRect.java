@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -14,23 +19,27 @@ public class HtmlRect extends StackPane {
     private Text text;
     private String defaultText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     private String content;
-    private TextArea html_code;
+    private String src = "https://picsum.photos/id/24/500/500";
+    private String alt = "";
+    private int numElements;
+    private List<String> listElements = new ArrayList<>();
+    private String legend = "";
 
-    public HtmlRect(double x, double y, double width, double height, String name, TextArea html_code) {
+    public HtmlRect(double x, double y, double width, double height, String name) {
         super();
-        this.html_code = html_code;
         setLayoutX(x);
         setLayoutY(y);
         this.tag = name;
         rect = new Rectangle(x, y, width, height);
         rect.setFill(Color.WHITESMOKE);
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(1);
         rect.getStrokeDashArray().addAll(5.0, 5.0, 5.0, 5.0, 5.0);
         text = new Text(this.tag);
         content = defaultText;
         getChildren().add(rect);
         getChildren().add(text);
+        ContextMenu menu = new ContextMenu();
+        MenuItem test = new MenuItem("test");
+        menu.getItems().add(test);
 
         setOnMouseMoved(e -> {
             double mouseX = e.getX();
@@ -63,11 +72,15 @@ public class HtmlRect extends StackPane {
 
         focusedProperty().addListener((ov, oldV, newV) -> {
             if (!newV) {
-                // rect.setStroke(Color.TRANSPARENT);
-                // rect.setStrokeWidth(1);
-                // rect.setFill(Color.TRANSPARENT);
-                rect.setVisible(false);
+                if (!this.tag.equals("radio") && !this.tag.equals("checkbox")) {
+                    rect.setStroke(Color.BLACK);
+                    rect.setStrokeWidth(1);
+                    // rect.setVisible(false);
+                } else {
+                    rect.setStroke(Color.TRANSPARENT);
+                }
                 text.setVisible(false);
+                rect.setFill(Color.TRANSPARENT);
             } else {
                 rect.setVisible(true);
                 text.setVisible(true);
@@ -80,71 +93,78 @@ public class HtmlRect extends StackPane {
 
         setOnMousePressed((e) -> {
             requestFocus();
-            prevX = e.getSceneX();
-            prevY = e.getSceneY();
+            if (e.getButton() == MouseButton.SECONDARY) {
+                menu.show(rect, e.getScreenX(), e.getScreenY());
+            } else {
+                menu.hide();
+                prevX = e.getSceneX();
+                prevY = e.getSceneY();
+            }
 
         });
 
         setOnMouseDragged((e) -> {
+            if (e.getButton() == MouseButton.PRIMARY) {
 
-            double offsetX = e.getSceneX() - prevX;
-            double offsetY = e.getSceneY() - prevY;
+                double offsetX = e.getSceneX() - prevX;
+                double offsetY = e.getSceneY() - prevY;
 
-            StackPane s = (StackPane) (e.getSource());
-            Cursor curCursor = getCursor();
+                StackPane s = (StackPane) (e.getSource());
+                Cursor curCursor = getCursor();
 
-            double newX = s.getLayoutX() + offsetX;
-            double newY = s.getLayoutY() + offsetY;
-            Pair<Double, Double> parentWH = getParentWH();
-            double paneW = parentWH.getKey();
-            double paneH = parentWH.getValue();
-            boolean leftBound = newX >= 0;
-            boolean topBound = newY >= 0;
-            boolean rightBound = newX + rect.getWidth() < paneW;
-            boolean bottomBound = newY + rect.getHeight() < paneH;
+                double newX = s.getLayoutX() + offsetX;
+                double newY = s.getLayoutY() + offsetY;
+                Pair<Double, Double> parentWH = getParentWH();
+                double paneW = parentWH.getKey();
+                double paneH = parentWH.getValue();
+                boolean leftBound = newX >= 0;
+                boolean topBound = newY >= 0;
+                boolean rightBound = newX + rect.getWidth() < paneW;
+                boolean bottomBound = newY + rect.getHeight() < paneH;
 
-            if (curCursor == Cursor.HAND) {
-                if (leftBound && rightBound && topBound && bottomBound) {
-                    s.setLayoutX(newX);
-                    s.setLayoutY(newY);
+                if (curCursor == Cursor.HAND) {
+                    if (leftBound && rightBound && topBound && bottomBound) {
+                        s.setLayoutX(newX);
+                        s.setLayoutY(newY);
+                    }
+
+                }
+                if (curCursor == Cursor.N_RESIZE || curCursor == Cursor.NE_RESIZE ||
+                        curCursor == Cursor.NW_RESIZE) {
+                    if (topBound && rect.getHeight() - offsetY > 20) {
+                        s.setLayoutY(s.getLayoutY() + offsetY);
+                        rect.setHeight(rect.getHeight() - offsetY);
+                    }
+
+                }
+                if (curCursor == Cursor.E_RESIZE || curCursor == Cursor.NE_RESIZE ||
+                        curCursor == Cursor.SE_RESIZE) {
+                    if (rightBound && rect.getWidth() + offsetX > 20) {
+                        rect.setWidth(rect.getWidth() + offsetX);
+                    }
+
+                }
+                if (curCursor == Cursor.S_RESIZE || curCursor == Cursor.SE_RESIZE ||
+                        curCursor == Cursor.SW_RESIZE) {
+                    if (bottomBound && rect.getHeight() + offsetY > 20) {
+
+                        rect.setHeight(rect.getHeight() + offsetY);
+                    }
+
+                }
+                if (curCursor == Cursor.W_RESIZE || curCursor == Cursor.NW_RESIZE ||
+                        curCursor == Cursor.SW_RESIZE) {
+                    if (leftBound && rect.getWidth() - offsetX > 20) {
+
+                        s.setLayoutX(s.getLayoutX() + offsetX);
+                        rect.setWidth(rect.getWidth() - offsetX);
+                    }
+
                 }
 
+                prevX = e.getSceneX();
+                prevY = e.getSceneY();
             }
-            if (curCursor == Cursor.N_RESIZE || curCursor == Cursor.NE_RESIZE ||
-                    curCursor == Cursor.NW_RESIZE) {
-                if (topBound && rect.getHeight() - offsetY > 20) {
-                    s.setLayoutY(s.getLayoutY() + offsetY);
-                    rect.setHeight(rect.getHeight() - offsetY);
-                }
-
-            }
-            if (curCursor == Cursor.E_RESIZE || curCursor == Cursor.NE_RESIZE ||
-                    curCursor == Cursor.SE_RESIZE) {
-                if (rightBound && rect.getWidth() + offsetX > 20) {
-                    rect.setWidth(rect.getWidth() + offsetX);
-                }
-
-            }
-            if (curCursor == Cursor.S_RESIZE || curCursor == Cursor.SE_RESIZE ||
-                    curCursor == Cursor.SW_RESIZE) {
-                if (bottomBound && rect.getHeight() + offsetY > 20) {
-
-                    rect.setHeight(rect.getHeight() + offsetY);
-                }
-
-            }
-            if (curCursor == Cursor.W_RESIZE || curCursor == Cursor.NW_RESIZE ||
-                    curCursor == Cursor.SW_RESIZE) {
-                if (leftBound && rect.getWidth() - offsetX > 20) {
-
-                    s.setLayoutX(s.getLayoutX() + offsetX);
-                    rect.setWidth(rect.getWidth() - offsetX);
-                }
-
-            }
-
-            prevX = e.getSceneX();
-            prevY = e.getSceneY();
 
         });
 
@@ -166,15 +186,70 @@ public class HtmlRect extends StackPane {
     }
 
     public String getHTMLString() {
-        int num = ((Pane) getParent()).getChildren().size();
-        // String output = "<" + this.tag + " ";
-        String output = "<h1 ";
-        output += "id = \"" + num + "\" style=\"position:absolute; width:" + rect.getWidth() + "px; height:"
-                + rect.getHeight();
-        output += "px; top:" + getLayoutY() + "px; left:" + getLayoutX() + "px;\">";
-        // output += this.content + "</" + this.tag + ">";
-        output += this.content + "</" + "h1" + ">";
+
+        if (this.tag.equals("img")) {
+            return getHTMLImg();
+        } else if (this.tag.equals("ul") || this.tag.equals("ol")) {
+            return getHTMLlist();
+        } else if (this.tag.equals("radio") || this.tag.equals("checkbox")) {
+            return getHTMLCheck();
+        } else {
+            return getHTMLReg();
+        }
+    }
+
+    public String getInLineStyle() {
+        String output = "style=\"width:" + rect.getWidth() + "px; height:" + rect.getHeight();
+        output += "px; top:" + getLayoutY() + "px; left:" + getLayoutX() + "px;\"";
         return output;
+    }
+
+    public String getHTMLImg() {
+        String output = "<img src=\"" + this.src + "\"";
+        output += " alt=\"" + this.alt + "\" ";
+        output += getInLineStyle() + ">";
+        return output;
+    }
+
+    public String getHTMLReg() {
+        String output = "<" + this.tag + " " + getInLineStyle() + ">";
+        output += this.content;
+        output += "</" + this.tag + ">";
+        return output;
+    }
+
+    public String getHTMLlist() {
+        String output = "<" + this.tag + " " + getInLineStyle() + ">\n";
+        for (int i = 0; i < this.numElements; i++) {
+            output += "        <li>";
+            output += listElements.get(i);
+            output += "</li>\n";
+        }
+        output += "    </" + this.tag + ">";
+        return output;
+    }
+
+    public String getHTMLCheck() {
+        String output = "    <fieldset " + getInLineStyle() + ">\n        <legend>" + this.legend + "</legend>\n";
+        for (int i = 0; i < this.numElements; i++) {
+            output += "        <div>\n";
+            output += "            <input type=\"" + this.tag + "\" name=\"" + this.hashCode() + "\" ";
+            if (i == 0) {
+                output += "checked";
+            }
+            output += ">\n";
+            output += "            <label>" + listElements.get(i) + "</label>\n";
+            output += "        </div>\n";
+        }
+        output += "    </fieldset>";
+        return output;
+    }
+
+    public void setNumElements(int num) {
+        for (int i = 0; i < num; i++) {
+            this.listElements.add("default text");
+        }
+        this.numElements = num;
     }
 
 }

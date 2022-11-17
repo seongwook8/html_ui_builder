@@ -117,8 +117,7 @@ public class HubController {
             if (e.getButton() == MouseButton.PRIMARY) {
                 canvas.requestFocus();
             } else if (e.getButton() == MouseButton.SECONDARY) {
-                HtmlRect rect = cp.addShape(canvas, this.points, html_code);
-                // addMouseDraggedEvent(rect);
+                HtmlRect rect = cp.addShape(canvas, this.points);
                 canvas.getChildren().add(rect);
                 rectangles.add(rect);
                 points = new ArrayList<>();
@@ -130,6 +129,7 @@ public class HubController {
                 canvasState = CanvasState.MOVE;
                 rect.requestFocus();
                 renderHTMLText();
+                lastClicked = rect;
             }
         } else if (canvasState == CanvasState.MOVE) {
             if (e.getTarget().getClass() == canvas.getClass()) {
@@ -212,6 +212,7 @@ public class HubController {
         html_code.setText(htmlSource);
 
         webview.getEngine().loadContent(htmlSource);
+
     }
 
     @FXML

@@ -10,34 +10,83 @@ public class DollarQ {
 
     public DollarQ() {
         List<double[]> temp = new ArrayList<>();
-        temp.add(new double[] { 30, 7, 1 });
-        temp.add(new double[] { 103, 7, 1 });
-        temp.add(new double[] { 66, 7, 2 });
-        temp.add(new double[] { 66, 87, 2 });
-        PointCloud t = new PointCloud("T", temp);
-        templates.put("T", t);
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 30, 10, 1 });
+        temp.add(new double[] { 20, 10, 2 });
+        temp.add(new double[] { 20, 40, 2 });
+        temp.add(new double[] { 10, 40, 3 });
+        temp.add(new double[] { 30, 40, 3 });
+        PointCloud I = new PointCloud("img", temp);
+        templates.put("img", I);
 
         temp = new ArrayList<>();
-        temp.add(new double[] { 177, 2, 1 });
-        temp.add(new double[] { 177, 95, 1 });
-        temp.add(new double[] { 182, 1, 2 });
-        temp.add(new double[] { 246, 95, 2 });
-        temp.add(new double[] { 247, 87, 3 });
-        temp.add(new double[] { 247, 1, 3 });
-        PointCloud n = new PointCloud("N", temp);
-        templates.put("N", n);
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        temp.add(new double[] { 10, 30, 1 });
+        temp.add(new double[] { 13, 25, 1 });
+        temp.add(new double[] { 20, 22, 1 });
+        temp.add(new double[] { 25, 25, 1 });
+        temp.add(new double[] { 28, 30, 1 });
+        temp.add(new double[] { 25, 35, 1 });
+        temp.add(new double[] { 20, 40, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        PointCloud B = new PointCloud("button", temp);
+        templates.put("button", B);
 
         temp = new ArrayList<>();
-        temp.add(new double[] { 0, 0, 1 });
-        temp.add(new double[] { 75, 0, 1 });
-        temp.add(new double[] { 75, 1, 2 });
-        temp.add(new double[] { 75, 50, 2 });
-        temp.add(new double[] { 74, 50, 3 });
-        temp.add(new double[] { 0, 50, 3 });
-        temp.add(new double[] { 0, 49, 3 });
-        temp.add(new double[] { 0, 1, 3 });
-        PointCloud square = new PointCloud("Square", temp);
-        templates.put("Square", square);
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 50, 1 });
+        temp.add(new double[] { 10, 10, 2 });
+        temp.add(new double[] { 20, 10, 2 });
+        temp.add(new double[] { 30, 20, 2 });
+        temp.add(new double[] { 20, 30, 2 });
+        temp.add(new double[] { 10, 30, 2 });
+        PointCloud P = new PointCloud("p", temp);
+        templates.put("p", P);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 0, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        temp.add(new double[] { 10, 20, 2 });
+        temp.add(new double[] { 30, 20, 2 });
+        temp.add(new double[] { 30, 0, 3 });
+        temp.add(new double[] { 30, 40, 3 });
+        PointCloud h = new PointCloud("h", temp);
+        templates.put("h", h);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        temp.add(new double[] { 10, 20, 1 });
+        temp.add(new double[] { 18, 12, 1 });
+        temp.add(new double[] { 30, 10, 1 });
+        PointCloud r = new PointCloud("radio", temp);
+        templates.put("radio", r);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 30, 1 });
+        temp.add(new double[] { 20, 40, 1 });
+        temp.add(new double[] { 40, 40, 1 });
+        PointCloud c = new PointCloud("checkbox", temp);
+        templates.put("checkbox", c);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        temp.add(new double[] { 30, 40, 1 });
+        temp.add(new double[] { 30, 10, 1 });
+        temp.add(new double[] { 10, 10, 1 });
+        PointCloud o = new PointCloud("ol", temp);
+        templates.put("ol", o);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 40, 1 });
+        temp.add(new double[] { 30, 40, 1 });
+        temp.add(new double[] { 30, 10, 1 });
+        PointCloud u = new PointCloud("ul", temp);
+        templates.put("ul", u);
 
     }
 
@@ -278,14 +327,14 @@ public class DollarQ {
 
     // for debugging
 
-    private void printList(List<double[]> list) {
-        System.out.println("---------" + list.size() + " points -------------");
-        for (double[] point : list) {
-            System.out.print(point[0] + " ,");
-            System.out.print(point[1] + " ,");
-            System.out.print(point[2] + "\n");
-        }
-    }
+    // private void printList(List<double[]> list) {
+    // System.out.println("---------" + list.size() + " points -------------");
+    // for (double[] point : list) {
+    // System.out.print(point[0] + " ,");
+    // System.out.print(point[1] + " ,");
+    // System.out.print(point[2] + "\n");
+    // }
+    // }
 
     // private void testResample() {
     // List<double[]> list = new ArrayList<>();
