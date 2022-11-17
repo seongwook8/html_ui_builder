@@ -287,14 +287,14 @@ public class DollarQ {
         }
     }
 
-    private void testResample() {
-        List<double[]> list = new ArrayList<>();
-        for (int i = 0; i < 2000; i++) {
-            list.add(new double[] { 0, i, 1 });
-        }
-        List<double[]> sampled = resample(list);
-        printList(list);
-        printList(sampled);
-    }
+    // private void testResample() {
+    // List<double[]> list = new ArrayList<>();
+    // for (int i = 0; i < 2000; i++) {
+    // list.add(new double[] { 0, i, 1 });
+    // }
+    // List<double[]> sampled = resample(list);
+    // printList(list);
+    // printList(sampled);
+    // }
 
 }

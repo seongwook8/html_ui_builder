@@ -1,10 +1,6 @@
-import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,7 +14,6 @@ public class HtmlRect extends StackPane {
     private Text text;
     private String defaultText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     private String content;
-    private String htmlString;
     private TextArea html_code;
 
     public HtmlRect(double x, double y, double width, double height, String name, TextArea html_code) {
@@ -91,7 +86,6 @@ public class HtmlRect extends StackPane {
         });
 
         setOnMouseDragged((e) -> {
-            String prevHTML = getHTMLString();
 
             double offsetX = e.getSceneX() - prevX;
             double offsetY = e.getSceneY() - prevY;
@@ -152,10 +146,6 @@ public class HtmlRect extends StackPane {
             prevX = e.getSceneX();
             prevY = e.getSceneY();
 
-            String curHTML = getHTMLString();
-            HubController.htmlSource = HubController.htmlSource.replace(prevHTML, curHTML);
-            this.html_code.setText(HubController.htmlSource);
-
         });
 
     }
@@ -185,10 +175,6 @@ public class HtmlRect extends StackPane {
         // output += this.content + "</" + this.tag + ">";
         output += this.content + "</" + "h1" + ">";
         return output;
-    }
-
-    public void updateHTMLString() {
-        htmlString = getHTMLString();
     }
 
 }

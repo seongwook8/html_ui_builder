@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.swing.text.html.HTML;
+
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -105,6 +107,7 @@ public class HubController {
     private void removeRect(KeyEvent e) {
         if (e.getCode() == KeyCode.DELETE) {
             canvas.getChildren().remove(lastClicked);
+            renderHTMLText();
         }
     }
 
@@ -126,9 +129,7 @@ public class HubController {
                 status.setText("Detected: " + rect.getTag());
                 canvasState = CanvasState.MOVE;
                 rect.requestFocus();
-                html_code.insertText(bodyLocation, rect.getHTMLString() + "\n");
-                htmlSource = html_code.getText();
-
+                renderHTMLText();
             }
         } else if (canvasState == CanvasState.MOVE) {
             if (e.getTarget().getClass() == canvas.getClass()) {
@@ -147,6 +148,18 @@ public class HubController {
 
     }
 
+    private void renderHTMLText() {
+        String combined = "";
+        for (Node node : canvas.getChildren()) {
+            if (node.getClass() == HtmlRect.class) {
+                HtmlRect rect = (HtmlRect) node;
+                combined += "    " + rect.getHTMLString() + "\n";
+            }
+        }
+        combined += "</body>\n</html>";
+        html_code.replaceText(bodyLocation, html_code.getLength(), combined);
+    }
+
     @FXML
     private void dragCanvas(MouseEvent e) {
         if (canvasState == CanvasState.DRAW) {
@@ -161,7 +174,7 @@ public class HubController {
             }
         } else if (canvasState == CanvasState.MOVE) {
             if (e.getButton() == MouseButton.PRIMARY) {
-
+                renderHTMLText();
             }
         }
 
@@ -189,10 +202,11 @@ public class HubController {
         List<String> htmlList = HtmlProcessor.html2List(path);
         String htmlSource = "";
         for (String line : htmlList) {
-            if (line.startsWith("</body>")) {
+            htmlSource += line + "\n";
+            if (line.endsWith("<body>")) {
                 bodyLocation = htmlSource.length();
             }
-            htmlSource += line + "\n";
+
         }
 
         html_code.setText(htmlSource);
