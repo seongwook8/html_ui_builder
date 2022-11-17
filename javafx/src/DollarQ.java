@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DollarQ {
-    private int cloudSize = 32;
+    private int cloudSize = 64;
     private int lutSize = 64;
     private HashMap<String, PointCloud> templates = new HashMap<>();
     private int templateCnt = 2;
@@ -18,7 +18,7 @@ public class DollarQ {
         templates.put("T", t);
 
         temp = new ArrayList<>();
-        temp.add(new double[] { 177, 92, 1 });
+        temp.add(new double[] { 177, 2, 1 });
         temp.add(new double[] { 177, 95, 1 });
         temp.add(new double[] { 182, 1, 2 });
         temp.add(new double[] { 246, 95, 2 });
@@ -26,6 +26,18 @@ public class DollarQ {
         temp.add(new double[] { 247, 1, 3 });
         PointCloud n = new PointCloud("N", temp);
         templates.put("N", n);
+
+        temp = new ArrayList<>();
+        temp.add(new double[] { 0, 0, 1 });
+        temp.add(new double[] { 75, 0, 1 });
+        temp.add(new double[] { 75, 1, 2 });
+        temp.add(new double[] { 75, 50, 2 });
+        temp.add(new double[] { 74, 50, 3 });
+        temp.add(new double[] { 0, 50, 3 });
+        temp.add(new double[] { 0, 49, 3 });
+        temp.add(new double[] { 0, 1, 3 });
+        PointCloud square = new PointCloud("Square", temp);
+        templates.put("Square", square);
 
     }
 
