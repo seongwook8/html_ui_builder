@@ -1,8 +1,13 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
@@ -14,12 +19,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import javafx.scene.layout.Pane;
-
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class HubController {
@@ -37,7 +43,8 @@ public class HubController {
 
     @FXML
     private void initialize() {
-        loadHtml("src/test.html");
+
+        loadHtml("test.html");
         html_code.setEditable(false);
 
         html_code.textProperty().addListener((obs, oldText, newText) -> {
@@ -49,6 +56,7 @@ public class HubController {
         cp = new CanvasProcessor();
 
         status.setText("Status");
+
     }
 
     // =============== Menu Bar Controls ===============
@@ -65,14 +73,44 @@ public class HubController {
     private void closeApp() {
         Stage stage = (Stage) app_main.getScene().getWindow();
         stage.close();
+        Platform.exit();
     }
 
     @FXML
     private Pane canvas;
 
+    @FXML
+    private void gestureHelp() {
+        new HelpWindow().display();
+    }
+
     // =============== Canvas Area ===============
 
-    private enum CanvasState {
+    private boolean enableBorders = false;
+
+    @FXML
+    private CheckMenuItem borderMenuItem;
+
+    @FXML
+    private void enableBorders() {
+        enableBorders = !enableBorders;
+        for (Node node : canvas.getChildren()) {
+            if (node.getClass() == lastClicked.getClass()) {
+                if (enableBorders) {
+                    ((HtmlRect) node).rect.setStroke(Color.BLACK);
+                } else {
+                    ((HtmlRect) node).rect.setStroke(Color.TRANSPARENT);
+                }
+
+            }
+        }
+    }
+
+    public boolean getEnableBorder() {
+        return enableBorders;
+    }
+
+    public static enum CanvasState {
         DRAW,
         MOVE
     }
@@ -244,6 +282,10 @@ public class HubController {
             lastClicked = rect;
         }
 
+    }
+
+    public CanvasState getCanvasState() {
+        return canvasState;
     }
 
     // =============== HTML Code Area ===============

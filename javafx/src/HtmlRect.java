@@ -3,19 +3,21 @@ import java.util.List;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 public class HtmlRect extends StackPane {
     private HubController controller;
     public Rectangle rect;
-    private Text text;
+    private Label text;
     private ContextMenu contextMenu;
 
     public double prevX, prevY, prevW, prevH;
@@ -50,9 +52,12 @@ public class HtmlRect extends StackPane {
         focusedProperty().addListener((ov, oldV, newV) -> {
             if (!newV) {
                 if (!this.tag.equals("radio") && !this.tag.equals("checkbox")) {
-                    rect.setStroke(Color.BLACK);
-                    rect.setStrokeWidth(1);
-                    // rect.setVisible(false);
+                    if (controller.getEnableBorder()) {
+                        rect.setStroke(Color.BLACK);
+                        rect.setStrokeWidth(1);
+                    } else {
+                        rect.setStroke(Color.TRANSPARENT);
+                    }
                 } else {
                     rect.setStroke(Color.TRANSPARENT);
                 }
@@ -62,7 +67,7 @@ public class HtmlRect extends StackPane {
                 rect.setVisible(true);
                 text.setVisible(true);
                 rect.setStroke(Color.BLUE);
-                rect.setFill(Color.WHITESMOKE);
+                rect.setFill(Color.TRANSPARENT);
                 rect.setStrokeWidth(1.5);
 
             }
@@ -72,13 +77,15 @@ public class HtmlRect extends StackPane {
 
     public void setRectText(double x, double y, double width, double height) {
         rect = new Rectangle(x, y, width, height);
-        rect.setFill(Color.WHITESMOKE);
+        rect.setFill(Color.TRANSPARENT);
         rect.getStrokeDashArray().addAll(5.0, 5.0, 5.0, 5.0, 5.0);
         if (tag.equals("h")) {
-            text = new Text(this.tag + hSize);
+            text = new Label(this.tag + hSize);
         } else {
-            text = new Text(this.tag);
+            text = new Label(this.tag);
         }
+        text.setBackground(new Background(new BackgroundFill(Color.WHITE, null, getInsets())));
+        setTextLocation();
         getChildren().add(rect);
         getChildren().add(text);
     }
@@ -91,126 +98,153 @@ public class HtmlRect extends StackPane {
 
     public void mouseMoved() {
         setOnMouseMoved(e -> {
-            double mouseX = e.getX();
-            double mouseY = e.getY();
-            double resizeWidth = 8;
-            StackPane s = (StackPane) (e.getSource());
-            double curW = s.getWidth();
-            double curH = s.getHeight();
+            if (controller.getCanvasState() == HubController.CanvasState.MOVE) {
 
-            if (mouseX < resizeWidth && mouseY < resizeWidth) {
-                setCursor(Cursor.NW_RESIZE);
-            } else if (mouseY < resizeWidth && mouseX > curW - resizeWidth) {
-                setCursor(Cursor.NE_RESIZE);
-            } else if (mouseX < resizeWidth && mouseY > curH - resizeWidth) {
-                setCursor(Cursor.SW_RESIZE);
-            } else if (mouseX > -resizeWidth + curW && mouseY > curH - resizeWidth) {
-                setCursor(Cursor.SE_RESIZE);
-            } else if (mouseX < resizeWidth) {
-                setCursor(Cursor.W_RESIZE);
-            } else if (mouseY < resizeWidth) {
-                setCursor(Cursor.N_RESIZE);
-            } else if (mouseX > -resizeWidth + curW) {
-                setCursor(Cursor.E_RESIZE);
-            } else if (mouseY > -resizeWidth + curH) {
-                setCursor(Cursor.S_RESIZE);
-            } else {
-                setCursor(Cursor.HAND);
+                double mouseX = e.getX();
+                double mouseY = e.getY();
+                double resizeWidth = 8;
+                StackPane s = (StackPane) (e.getSource());
+                double curW = s.getWidth();
+                double curH = s.getHeight();
+
+                if (mouseX < resizeWidth && mouseY < resizeWidth) {
+                    setCursor(Cursor.NW_RESIZE);
+                } else if (mouseY < resizeWidth && mouseX > curW - resizeWidth) {
+                    setCursor(Cursor.NE_RESIZE);
+                } else if (mouseX < resizeWidth && mouseY > curH - resizeWidth) {
+                    setCursor(Cursor.SW_RESIZE);
+                } else if (mouseX > -resizeWidth + curW && mouseY > curH - resizeWidth) {
+                    setCursor(Cursor.SE_RESIZE);
+                } else if (mouseX < resizeWidth) {
+                    setCursor(Cursor.W_RESIZE);
+                } else if (mouseY < resizeWidth) {
+                    setCursor(Cursor.N_RESIZE);
+                } else if (mouseX > -resizeWidth + curW) {
+                    setCursor(Cursor.E_RESIZE);
+                } else if (mouseY > -resizeWidth + curH) {
+                    setCursor(Cursor.S_RESIZE);
+                } else {
+                    setCursor(Cursor.HAND);
+                }
             }
         });
     }
 
     public void mousePressed() {
         setOnMousePressed((e) -> {
-            requestFocus();
-            if (e.getButton() == MouseButton.SECONDARY) {
-                contextMenu.show(rect, e.getScreenX(), e.getScreenY());
-            } else {
-                contextMenu.hide();
-                prevX = e.getSceneX();
-                prevY = e.getSceneY();
-            }
+            if (controller.getCanvasState() == HubController.CanvasState.MOVE) {
 
+                requestFocus();
+                if (e.getButton() == MouseButton.SECONDARY) {
+                    contextMenu.show(rect, e.getScreenX(), e.getScreenY());
+                } else {
+                    contextMenu.hide();
+                    prevX = e.getSceneX();
+                    prevY = e.getSceneY();
+                }
+
+            }
         });
     }
 
     public void mouseDragged() {
         setOnMousePressed((e) -> {
-            requestFocus();
-            if (e.getButton() == MouseButton.SECONDARY) {
-                contextMenu.show(rect, e.getScreenX(), e.getScreenY());
-            } else {
-                contextMenu.hide();
-                prevX = e.getSceneX();
-                prevY = e.getSceneY();
+            if (controller.getCanvasState() == HubController.CanvasState.MOVE) {
+
+                requestFocus();
+                if (e.getButton() == MouseButton.SECONDARY) {
+                    contextMenu.show(rect, e.getScreenX(), e.getScreenY());
+                } else {
+                    contextMenu.hide();
+                    prevX = e.getSceneX();
+                    prevY = e.getSceneY();
+                }
             }
 
         });
 
         setOnMouseDragged((e) -> {
             if (e.getButton() == MouseButton.PRIMARY) {
+                if (controller.getCanvasState() == HubController.CanvasState.MOVE) {
 
-                double offsetX = e.getSceneX() - prevX;
-                double offsetY = e.getSceneY() - prevY;
+                    double offsetX = e.getSceneX() - prevX;
+                    double offsetY = e.getSceneY() - prevY;
 
-                StackPane s = (StackPane) (e.getSource());
-                Cursor curCursor = getCursor();
+                    StackPane s = (StackPane) (e.getSource());
+                    Cursor curCursor = getCursor();
 
-                double newX = s.getLayoutX() + offsetX;
-                double newY = s.getLayoutY() + offsetY;
-                Pair<Double, Double> parentWH = getParentWH();
-                double paneW = parentWH.getKey();
-                double paneH = parentWH.getValue();
-                boolean leftBound = newX >= 0;
-                boolean topBound = newY >= 0;
-                boolean rightBound = newX + rect.getWidth() < paneW;
-                boolean bottomBound = newY + rect.getHeight() < paneH;
+                    double newX = s.getLayoutX() + offsetX;
+                    double newY = s.getLayoutY() + offsetY;
+                    Pair<Double, Double> parentWH = getParentWH();
+                    double paneW = parentWH.getKey();
+                    double paneH = parentWH.getValue();
+                    boolean leftBound = newX >= 0;
+                    boolean topBound = newY >= 0;
+                    boolean rightBound = newX + rect.getWidth() < paneW;
+                    boolean bottomBound = newY + rect.getHeight() < paneH;
 
-                if (curCursor == Cursor.HAND) {
-                    if (leftBound && topBound) {
-                        s.setLayoutX(newX);
-                        s.setLayoutY(newY);
+                    if (curCursor == Cursor.HAND) {
+                        if (leftBound && topBound) {
+                            s.setLayoutX(newX);
+                            s.setLayoutY(newY);
+                        }
+
                     }
+                    if (curCursor == Cursor.N_RESIZE || curCursor == Cursor.NE_RESIZE ||
+                            curCursor == Cursor.NW_RESIZE) {
+                        if (topBound && rect.getHeight() - offsetY > 20) {
+                            s.setLayoutY(s.getLayoutY() + offsetY);
+                            rect.setHeight(rect.getHeight() - offsetY);
+                        }
 
-                }
-                if (curCursor == Cursor.N_RESIZE || curCursor == Cursor.NE_RESIZE ||
-                        curCursor == Cursor.NW_RESIZE) {
-                    if (topBound && rect.getHeight() - offsetY > 20) {
-                        s.setLayoutY(s.getLayoutY() + offsetY);
-                        rect.setHeight(rect.getHeight() - offsetY);
                     }
+                    if (curCursor == Cursor.E_RESIZE || curCursor == Cursor.NE_RESIZE ||
+                            curCursor == Cursor.SE_RESIZE) {
+                        if (rightBound && rect.getWidth() + offsetX > 20) {
+                            rect.setWidth(rect.getWidth() + offsetX);
+                        }
 
-                }
-                if (curCursor == Cursor.E_RESIZE || curCursor == Cursor.NE_RESIZE ||
-                        curCursor == Cursor.SE_RESIZE) {
-                    if (rightBound && rect.getWidth() + offsetX > 20) {
-                        rect.setWidth(rect.getWidth() + offsetX);
                     }
+                    if (curCursor == Cursor.S_RESIZE || curCursor == Cursor.SE_RESIZE ||
+                            curCursor == Cursor.SW_RESIZE) {
+                        if (bottomBound && rect.getHeight() + offsetY > 20) {
 
-                }
-                if (curCursor == Cursor.S_RESIZE || curCursor == Cursor.SE_RESIZE ||
-                        curCursor == Cursor.SW_RESIZE) {
-                    if (bottomBound && rect.getHeight() + offsetY > 20) {
+                            rect.setHeight(rect.getHeight() + offsetY);
+                        }
 
-                        rect.setHeight(rect.getHeight() + offsetY);
                     }
+                    if (curCursor == Cursor.W_RESIZE || curCursor == Cursor.NW_RESIZE ||
+                            curCursor == Cursor.SW_RESIZE) {
+                        if (leftBound && rect.getWidth() - offsetX > 20) {
 
-                }
-                if (curCursor == Cursor.W_RESIZE || curCursor == Cursor.NW_RESIZE ||
-                        curCursor == Cursor.SW_RESIZE) {
-                    if (leftBound && rect.getWidth() - offsetX > 20) {
+                            s.setLayoutX(s.getLayoutX() + offsetX);
+                            rect.setWidth(rect.getWidth() - offsetX);
+                        }
 
-                        s.setLayoutX(s.getLayoutX() + offsetX);
-                        rect.setWidth(rect.getWidth() - offsetX);
                     }
+                    setTextLocation();
 
+                    prevX = e.getSceneX();
+                    prevY = e.getSceneY();
                 }
-
-                prevX = e.getSceneX();
-                prevY = e.getSceneY();
             }
 
         });
+    }
+
+    public void setTextLocation() {
+        int offset;
+
+        if (text.getText().equals("checkbox")) {
+            offset = 30;
+        } else if (text.getText().equals("img") || text.getText().equals("radio")) {
+            offset = 15;
+        } else {
+            offset = 10;
+        }
+
+        text.setTranslateX(rect.getWidth() / 2 - offset);
+        text.setTranslateY(rect.getHeight() / 2 - 10);
     }
 
     public void setContextMenu() {

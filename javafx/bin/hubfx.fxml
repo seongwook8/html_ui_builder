@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -42,9 +43,14 @@
               <MenuItem mnemonicParsing="false" onAction="#clearElements" text="Clear All" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <CheckMenuItem fx:id="borderMenuItem" mnemonicParsing="false" onAction="#enableBorders" text="Enable Borders" />
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="Gestures" />
+              <MenuItem mnemonicParsing="false" onAction="#gestureHelp" text="Gestures" />
             </items>
           </Menu>
         </menus>
@@ -53,10 +59,10 @@
          <children>
             <Button fx:id="detectB" mnemonicParsing="false" onAction="#detectGesture" prefWidth="60.0" text="Detect" textFill="#f5f8ff" />
             <Button fx:id="clearStrokeB" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#clearStrokes" prefWidth="100.0" text="Clear Strokes" textFill="#f5f8ff" />
-            <Button fx:id="changeDimB" layoutX="216.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeDimension" prefWidth="130.0" text="Change Dimensions" textFill="#f5f8ff" />
-            <Button fx:id="changeContB" layoutX="296.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeContent" prefWidth="110.0" text="Change Content" textFill="#f5f8ff" />
-            <Button fx:id="bringFrontB" layoutX="376.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToFront" prefWidth="80.0" text="Bring Front" textFill="#f5f8ff" />
-            <Button fx:id="sendBackB" layoutX="456.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToBack" prefWidth="80.0" text="Send Back" textFill="#f5f8ff" />
+            <Button fx:id="changeDimB" layoutX="216.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeDimension" prefWidth="140.0" text="Change Dimensions" textFill="#f5f8ff" />
+            <Button fx:id="changeContB" layoutX="296.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeContent" prefWidth="120.0" text="Change Content" textFill="#f5f8ff" />
+            <Button fx:id="bringFrontB" layoutX="376.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToFront" prefWidth="90.0" text="Bring Front" textFill="#f5f8ff" />
+            <Button fx:id="sendBackB" layoutX="456.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToBack" prefWidth="90.0" text="Send Back" textFill="#f5f8ff" />
             <Button fx:id="removeB" layoutX="536.0" layoutY="23.0" mnemonicParsing="false" onAction="#removeSelected" prefWidth="70.0" text="Remove" textFill="#f5f8ff" />
             <Button fx:id="clearAllB" layoutX="616.0" layoutY="23.0" mnemonicParsing="false" onAction="#clearElements" prefWidth="70.0" text="Clear All" textFill="#f5f8ff" />
          </children>
@@ -83,6 +89,6 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Label fx:id="status" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" style="-fx-background-color: #f5f8ff;" text="Clear" textFill="#1f276f" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Label fx:id="status" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" style="-fx-background-color: #f5f8ff;" text="Status" textFill="#1f276f" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

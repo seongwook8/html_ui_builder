@@ -54,6 +54,7 @@ public class ChangeDimWindow {
         apply.setPrefWidth(60);
         apply.setOnAction(e -> {
             rect.setRect(wSpinner.getValue(), hSpinner.getValue());
+            rect.setTextLocation();
             controller.renderHTMLText();
         });
         Button close = new Button("Close");
@@ -87,7 +88,7 @@ public class ChangeDimWindow {
         layout.getChildren().addAll(row1, row2, row3);
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("style.css");
+        scene.getStylesheets().add("css/style.css");
         window.setScene(scene);
         window.showAndWait();
     }

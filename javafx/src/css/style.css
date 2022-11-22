@@ -1,3 +1,7 @@
+* {
+    -fx-font-family: helvetica;
+}
+
 .anchor-pane {
     -fx-background-color: #c1e3fd;
 }
@@ -24,7 +28,7 @@
     -fx-text-fill: #1f276f;
 }
 
-.me .menu-item {
+.menu-item {
     -fx-background-color: #f5f8ff;
 }
 
@@ -40,6 +44,10 @@
 .menu-item:focused .label,
 .menu-item:hover .label {
     -fx-text-fill: #f5f8ff;
+}
+
+.check-menu-item {
+    -fx-background-color: #f5f8ff;
 }
 
 

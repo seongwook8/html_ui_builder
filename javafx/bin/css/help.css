@@ -1,0 +1,23 @@
+* {
+    -fx-alignment: center;
+    -fx-text-fill: #1f276f;
+}
+
+.vbox {
+    -fx-background-color: #f5f8ff;
+}
+
+.button {
+    -fx-background-color: #1f276f;
+    -fx-text-fill: #f5f8ff;
+}
+
+.button:hover {
+    -fx-background-color: #c1e3fd;
+    -fx-text-fill: #1f276f;
+}
+
+.button:pressed {
+    -fx-background-color: #8b7ffe;
+    -fx-text-fill: #f5f8ff;
+}

@@ -172,7 +172,7 @@ public class ChangeContentWindow {
         });
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("style.css");
+        scene.getStylesheets().add("css/style.css");
         window.setScene(scene);
         window.show();
 
