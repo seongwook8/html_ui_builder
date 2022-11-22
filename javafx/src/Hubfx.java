@@ -10,6 +10,7 @@ public class Hubfx extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("hubfx.fxml"));
         Scene scene = new Scene(loader.load(), 1200, 800);
+        scene.getStylesheets().add("style.css");
 
         stage.setTitle("HTML_UI_Builder");
         stage.setScene(scene);

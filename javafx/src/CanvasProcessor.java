@@ -11,7 +11,7 @@ public class CanvasProcessor {
 
     }
 
-    public HtmlRect addShape(Pane canvas, List<double[]> points) {
+    public HtmlRect addShape(Pane canvas, List<double[]> points, HubController controller) {
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
@@ -26,13 +26,13 @@ public class CanvasProcessor {
 
         String shape = dollarq.recognize(points);
 
-        if (shape.equals("h")) {
-            shape = "h1";
-        }
+        maxX = Math.max(maxX - minX, 50) + minX;
+        maxY = Math.max(maxY - minY, 50) + minY;
 
-        HtmlRect rect = new HtmlRect(minX, minY, maxX - minX, maxY - minY, shape);
+        HtmlRect rect = new HtmlRect(minX, minY, maxX - minX, maxY - minY, shape, controller);
 
         rect.setNumElements(3);
+        canvas.getChildren().add(rect);
 
         return rect;
 

@@ -9,7 +9,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -18,28 +17,13 @@
 
 <AnchorPane fx:id="app_main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HubController">
    <children>
-      <MenuBar maxHeight="30.0" minHeight="30.0" prefHeight="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="menubar" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" text="New">
+                  <MenuItem mnemonicParsing="false" onAction="#loadNew" text="New">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Save">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Save As">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="DOWN" shift="DOWN" shortcut="UP" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Open">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
               <MenuItem fx:id="menu_close" mnemonicParsing="false" onAction="#closeApp" text="Close">
@@ -50,26 +34,31 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
-                     </accelerator>
-                  </MenuItem>
-              <MenuItem mnemonicParsing="false" text="Clear" />
+                  <MenuItem mnemonicParsing="false" onAction="#changeDimension" text="Change Dimensions" />
+                  <MenuItem mnemonicParsing="false" onAction="#changeContent" text="Change Content" />
+                  <MenuItem mnemonicParsing="false" onAction="#selectedToFront" text="Bring to Front" />
+                  <MenuItem mnemonicParsing="false" onAction="#selectedToBack" text="Send to Back" />
+                  <MenuItem mnemonicParsing="false" onAction="#removeSelected" text="Remove Element" />
+              <MenuItem mnemonicParsing="false" onAction="#clearElements" text="Clear All" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" text="Gestures" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <HBox alignment="CENTER_LEFT" layoutY="30.0" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+      <HBox fx:id="tools" alignment="CENTER_LEFT" layoutY="30.0" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" spacing="20.0" style="-fx-background-color: #f5f8ff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <children>
-            <Button fx:id="load" mnemonicParsing="false" prefWidth="60.0" text="Detect" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="60.0" text="Clear" />
-            <ToggleButton mnemonicParsing="false" text="ToggleButton" />
+            <Button fx:id="detectB" mnemonicParsing="false" onAction="#detectGesture" prefWidth="60.0" text="Detect" textFill="#f5f8ff" />
+            <Button fx:id="clearStrokeB" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#clearStrokes" prefWidth="100.0" text="Clear Strokes" textFill="#f5f8ff" />
+            <Button fx:id="changeDimB" layoutX="216.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeDimension" prefWidth="130.0" text="Change Dimensions" textFill="#f5f8ff" />
+            <Button fx:id="changeContB" layoutX="296.0" layoutY="23.0" mnemonicParsing="false" onAction="#changeContent" prefWidth="110.0" text="Change Content" textFill="#f5f8ff" />
+            <Button fx:id="bringFrontB" layoutX="376.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToFront" prefWidth="80.0" text="Bring Front" textFill="#f5f8ff" />
+            <Button fx:id="sendBackB" layoutX="456.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectedToBack" prefWidth="80.0" text="Send Back" textFill="#f5f8ff" />
+            <Button fx:id="removeB" layoutX="536.0" layoutY="23.0" mnemonicParsing="false" onAction="#removeSelected" prefWidth="70.0" text="Remove" textFill="#f5f8ff" />
+            <Button fx:id="clearAllB" layoutX="616.0" layoutY="23.0" mnemonicParsing="false" onAction="#clearElements" prefWidth="70.0" text="Clear All" textFill="#f5f8ff" />
          </children>
          <padding>
             <Insets left="20.0" />
@@ -94,6 +83,6 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Label fx:id="status" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" text="Status" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Label fx:id="status" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" style="-fx-background-color: #f5f8ff;" text="Clear" textFill="#1f276f" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

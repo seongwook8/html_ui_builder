@@ -13,34 +13,83 @@ import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 public class HtmlRect extends StackPane {
-    public double prevX, prevY, prevW, prevH;
-    private String tag;
+    private HubController controller;
     public Rectangle rect;
     private Text text;
+    private ContextMenu contextMenu;
+
+    public double prevX, prevY, prevW, prevH;
+
+    private String tag;
     private String defaultText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    private String defaultSrc = "https://picsum.photos/id/24/500/500";
     private String content;
-    private String src = "https://picsum.photos/id/24/500/500";
+    private String src = "";
     private String alt = "";
-    private int numElements;
+    private int hSize = 1;
+
     private List<String> listElements = new ArrayList<>();
     private String legend = "";
 
-    public HtmlRect(double x, double y, double width, double height, String name) {
+    public HtmlRect(double x, double y, double width, double height, String name, HubController controller) {
         super();
         setLayoutX(x);
         setLayoutY(y);
         this.tag = name;
+        this.controller = controller;
+        this.src = defaultSrc;
+
+        content = defaultText;
+
+        setRectText(x, y, width, height);
+
+        setMouseEvents();
+
+        setContextMenu();
+
+        focusedProperty().addListener((ov, oldV, newV) -> {
+            if (!newV) {
+                if (!this.tag.equals("radio") && !this.tag.equals("checkbox")) {
+                    rect.setStroke(Color.BLACK);
+                    rect.setStrokeWidth(1);
+                    // rect.setVisible(false);
+                } else {
+                    rect.setStroke(Color.TRANSPARENT);
+                }
+                text.setVisible(false);
+                rect.setFill(Color.TRANSPARENT);
+            } else {
+                rect.setVisible(true);
+                text.setVisible(true);
+                rect.setStroke(Color.BLUE);
+                rect.setFill(Color.WHITESMOKE);
+                rect.setStrokeWidth(1.5);
+
+            }
+        });
+
+    }
+
+    public void setRectText(double x, double y, double width, double height) {
         rect = new Rectangle(x, y, width, height);
         rect.setFill(Color.WHITESMOKE);
         rect.getStrokeDashArray().addAll(5.0, 5.0, 5.0, 5.0, 5.0);
-        text = new Text(this.tag);
-        content = defaultText;
+        if (tag.equals("h")) {
+            text = new Text(this.tag + hSize);
+        } else {
+            text = new Text(this.tag);
+        }
         getChildren().add(rect);
         getChildren().add(text);
-        ContextMenu menu = new ContextMenu();
-        MenuItem test = new MenuItem("test");
-        menu.getItems().add(test);
+    }
 
+    public void setMouseEvents() {
+        mouseMoved();
+        mousePressed();
+        mouseDragged();
+    }
+
+    public void mouseMoved() {
         setOnMouseMoved(e -> {
             double mouseX = e.getX();
             double mouseY = e.getY();
@@ -69,34 +118,29 @@ public class HtmlRect extends StackPane {
                 setCursor(Cursor.HAND);
             }
         });
+    }
 
-        focusedProperty().addListener((ov, oldV, newV) -> {
-            if (!newV) {
-                if (!this.tag.equals("radio") && !this.tag.equals("checkbox")) {
-                    rect.setStroke(Color.BLACK);
-                    rect.setStrokeWidth(1);
-                    // rect.setVisible(false);
-                } else {
-                    rect.setStroke(Color.TRANSPARENT);
-                }
-                text.setVisible(false);
-                rect.setFill(Color.TRANSPARENT);
-            } else {
-                rect.setVisible(true);
-                text.setVisible(true);
-                rect.setStroke(Color.BLUE);
-                rect.setFill(Color.WHITESMOKE);
-                rect.setStrokeWidth(1.5);
-
-            }
-        });
-
+    public void mousePressed() {
         setOnMousePressed((e) -> {
             requestFocus();
             if (e.getButton() == MouseButton.SECONDARY) {
-                menu.show(rect, e.getScreenX(), e.getScreenY());
+                contextMenu.show(rect, e.getScreenX(), e.getScreenY());
             } else {
-                menu.hide();
+                contextMenu.hide();
+                prevX = e.getSceneX();
+                prevY = e.getSceneY();
+            }
+
+        });
+    }
+
+    public void mouseDragged() {
+        setOnMousePressed((e) -> {
+            requestFocus();
+            if (e.getButton() == MouseButton.SECONDARY) {
+                contextMenu.show(rect, e.getScreenX(), e.getScreenY());
+            } else {
+                contextMenu.hide();
                 prevX = e.getSceneX();
                 prevY = e.getSceneY();
             }
@@ -123,7 +167,7 @@ public class HtmlRect extends StackPane {
                 boolean bottomBound = newY + rect.getHeight() < paneH;
 
                 if (curCursor == Cursor.HAND) {
-                    if (leftBound && rightBound && topBound && bottomBound) {
+                    if (leftBound && topBound) {
                         s.setLayoutX(newX);
                         s.setLayoutY(newY);
                     }
@@ -167,11 +211,92 @@ public class HtmlRect extends StackPane {
             }
 
         });
+    }
 
+    public void setContextMenu() {
+        this.contextMenu = new ContextMenu();
+        MenuItem changeDimension = new MenuItem("Change Dimension");
+        changeDimension.setOnAction(e -> ChangeDimWindow.display(this, controller));
+
+        MenuItem changeContent = new MenuItem("Change Content");
+        changeContent.setOnAction(e -> ChangeContentWindow.display(this));
+
+        MenuItem bringFront = new MenuItem("Bring to Front");
+        bringFront.setOnAction(e -> controller.bringToFront(this));
+
+        MenuItem sendBack = new MenuItem("Send to Back");
+        sendBack.setOnAction(e -> controller.sendToBack(this));
+
+        MenuItem removeElement = new MenuItem("Remove");
+        removeElement.setOnAction(e -> {
+            controller.removeElement(this);
+        });
+
+        contextMenu.getItems().addAll(changeDimension, bringFront, sendBack, changeContent,
+                removeElement);
     }
 
     public String getTag() {
         return this.tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public int getHSize() {
+        return this.hSize;
+    }
+
+    public void setHSize(int hSize) {
+        this.hSize = hSize;
+        this.text.setText(this.tag + this.hSize);
+    }
+
+    public Rectangle getRectangle() {
+        return this.rect;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getSrc() {
+        return this.src;
+    }
+
+    public void setSrc(String src) {
+        this.src = src;
+    }
+
+    public String getLegend() {
+        return this.legend;
+    }
+
+    public void setLegend(String legend) {
+        this.legend = legend;
+
+    }
+
+    public List<String> getList() {
+        return this.listElements;
+    }
+
+    public void renderHTMLText() {
+        controller.renderHTMLText();
+    }
+
+    public void setList(List<String> list) {
+        this.listElements = new ArrayList<>(list);
+    }
+
+    public void setRect(double width, double height) {
+        rect.setWidth(width);
+        rect.setHeight(height);
     }
 
     public Pair<Double, Double> getParentWH() {
@@ -193,6 +318,8 @@ public class HtmlRect extends StackPane {
             return getHTMLlist();
         } else if (this.tag.equals("radio") || this.tag.equals("checkbox")) {
             return getHTMLCheck();
+        } else if (this.tag.equals("h")) {
+            return getHTag();
         } else {
             return getHTMLReg();
         }
@@ -211,6 +338,13 @@ public class HtmlRect extends StackPane {
         return output;
     }
 
+    public String getHTag() {
+        String output = "<" + this.tag + this.hSize + " " + getInLineStyle() + ">";
+        output += this.content;
+        output += "</" + this.tag + this.hSize + ">";
+        return output;
+    }
+
     public String getHTMLReg() {
         String output = "<" + this.tag + " " + getInLineStyle() + ">";
         output += this.content;
@@ -220,7 +354,7 @@ public class HtmlRect extends StackPane {
 
     public String getHTMLlist() {
         String output = "<" + this.tag + " " + getInLineStyle() + ">\n";
-        for (int i = 0; i < this.numElements; i++) {
+        for (int i = 0; i < this.listElements.size(); i++) {
             output += "        <li>";
             output += listElements.get(i);
             output += "</li>\n";
@@ -230,15 +364,15 @@ public class HtmlRect extends StackPane {
     }
 
     public String getHTMLCheck() {
-        String output = "    <fieldset " + getInLineStyle() + ">\n        <legend>" + this.legend + "</legend>\n";
-        for (int i = 0; i < this.numElements; i++) {
-            output += "        <div>\n";
-            output += "            <input type=\"" + this.tag + "\" name=\"" + this.hashCode() + "\" ";
+        String output = "<fieldset " + getInLineStyle() + ">\n        <legend>" + this.legend + "</legend>\n";
+        for (int i = 0; i < this.listElements.size(); i++) {
+            output += "            <div>\n";
+            output += "                <input type=\"" + this.tag + "\" name=\"" + this.hashCode() + "\" ";
             if (i == 0) {
                 output += "checked";
             }
             output += ">\n";
-            output += "            <label>" + listElements.get(i) + "</label>\n";
+            output += "                <label>" + listElements.get(i) + "</label>\n";
             output += "        </div>\n";
         }
         output += "    </fieldset>";
@@ -249,7 +383,6 @@ public class HtmlRect extends StackPane {
         for (int i = 0; i < num; i++) {
             this.listElements.add("default text");
         }
-        this.numElements = num;
     }
 
 }

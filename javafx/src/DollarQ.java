@@ -3,10 +3,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DollarQ {
-    private int cloudSize = 64;
-    private int lutSize = 64;
+    private int cloudSize = 128;
+    private int lutSize = 128;
     private HashMap<String, PointCloud> templates = new HashMap<>();
-    private int templateCnt = 2;
+    private int templateCnt = 8;
 
     public DollarQ() {
         List<double[]> temp = new ArrayList<>();
@@ -65,18 +65,22 @@ public class DollarQ {
         templates.put("radio", r);
 
         temp = new ArrayList<>();
-        temp.add(new double[] { 10, 30, 1 });
-        temp.add(new double[] { 20, 40, 1 });
+        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 40, 1 });
         temp.add(new double[] { 40, 40, 1 });
+        temp.add(new double[] { 40, 10, 1 });
+        temp.add(new double[] { 10, 10, 1 });
         PointCloud c = new PointCloud("checkbox", temp);
         templates.put("checkbox", c);
 
         temp = new ArrayList<>();
-        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 10, 30, 1 });
         temp.add(new double[] { 10, 40, 1 });
-        temp.add(new double[] { 30, 40, 1 });
-        temp.add(new double[] { 30, 10, 1 });
-        temp.add(new double[] { 10, 10, 1 });
+        temp.add(new double[] { 20, 40, 1 });
+        temp.add(new double[] { 20, 30, 1 });
+        temp.add(new double[] { 10, 30, 1 });
+        temp.add(new double[] { 30, 10, 2 });
+        temp.add(new double[] { 30, 40, 2 });
         PointCloud o = new PointCloud("ol", temp);
         templates.put("ol", o);
 
