@@ -48,6 +48,7 @@ public class HubController {
 
         cp = new CanvasProcessor();
 
+        status.setText("Status");
     }
 
     // =============== Menu Bar Controls ===============
@@ -76,7 +77,6 @@ public class HubController {
         MOVE
     }
 
-    private boolean stylusMode = false;
     private CanvasState canvasState = CanvasState.DRAW;
     private HtmlRect lastClicked;
 
@@ -98,18 +98,21 @@ public class HubController {
     public void removeElement(HtmlRect rect) {
         canvas.getChildren().remove(rect);
         renderHTMLText();
+        status.setText("Element Removed!");
     }
 
     @FXML
     private void clearAll() {
         clearElements();
         clearStrokes();
+        status.setText("Canvas Cleared!");
     }
 
     @FXML
     private void clearElements() {
         canvas.getChildren().clear();
         renderHTMLText();
+        status.setText("All Elements Removed!");
     }
 
     @FXML
@@ -119,7 +122,7 @@ public class HubController {
         circles = new ArrayList<>();
         stroke = 1;
         renderHTMLText();
-
+        status.setText("Strokes Removed!");
     }
 
     @FXML
@@ -127,6 +130,7 @@ public class HubController {
         if (lastClicked != null) {
             ChangeDimWindow.display(lastClicked, this);
         }
+        status.setText("Dimension Changed!");
 
     }
 
@@ -135,6 +139,7 @@ public class HubController {
         if (lastClicked != null) {
             ChangeContentWindow.display(lastClicked);
         }
+        status.setText("Content Changed!");
 
     }
 
@@ -143,8 +148,7 @@ public class HubController {
         if (canvasState == CanvasState.DRAW) {
             if (e.getButton() == MouseButton.PRIMARY) {
                 canvas.requestFocus();
-
-            } else if (e.getButton() == MouseButton.SECONDARY && !stylusMode) {
+            } else if (e.getButton() == MouseButton.SECONDARY) {
                 detectGesture();
             }
         } else if (canvasState == CanvasState.MOVE) {
@@ -176,10 +180,6 @@ public class HubController {
                 Circle circle = new Circle(x, y, font / 2);
                 canvas.getChildren().add(circle);
                 circles.add(circle);
-
-                if (stylusMode) {
-
-                }
 
             }
         } else if (canvasState == CanvasState.MOVE) {
@@ -221,12 +221,14 @@ public class HubController {
         canvas.getChildren().remove(element);
         canvas.getChildren().add(element);
         renderHTMLText();
+        status.setText("Element brought to Front!");
     }
 
     public void sendToBack(HtmlRect element) {
         canvas.getChildren().remove(element);
         canvas.getChildren().add(0, element);
         renderHTMLText();
+        status.setText("Element sent to Back!");
     }
 
     @FXML
