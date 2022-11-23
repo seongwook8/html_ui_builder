@@ -301,30 +301,12 @@ public class HubController {
         try {
             loadHtml("test.html");
         } catch (Exception e) {
-            System.out.println("file not accessible.");
+            System.out.println("file not accessible.");~
         }
     }
 
     @FXML
     private TextArea html_code;
-
-    // private void loadHtml(String path) {
-
-    // List<String> htmlList = HtmlProcessor.html2List(path);
-    // String htmlSource = "";
-    // for (String line : htmlList) {
-    // htmlSource += line + "\n";
-    // if (line.endsWith("<body>")) {
-    // bodyLocation = htmlSource.length();
-    // }
-
-    // }
-
-    // html_code.setText(htmlSource);
-
-    // webview.getEngine().loadContent(htmlSource);
-
-    // }
 
     private void loadHtml(String path) throws IOException {
 
