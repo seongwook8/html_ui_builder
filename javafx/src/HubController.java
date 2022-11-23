@@ -1,4 +1,7 @@
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +44,12 @@ public class HubController {
     @FXML
     private void initialize() {
 
-        loadHtml("test.html");
+        try {
+            loadHtml("test.html");
+        } catch (Exception e) {
+            System.out.println("file not accessible.");
+        }
+
         html_code.setEditable(false);
 
         html_code.textProperty().addListener((obs, oldText, newText) -> {
@@ -290,22 +298,47 @@ public class HubController {
     @FXML
     private void loadNew() {
         clearAll();
-        loadHtml("src/test.html");
+        try {
+            loadHtml("test.html");
+        } catch (Exception e) {
+            System.out.println("file not accessible.");
+        }
     }
 
     @FXML
     private TextArea html_code;
 
-    private void loadHtml(String path) {
+    // private void loadHtml(String path) {
 
-        List<String> htmlList = HtmlProcessor.html2List(path);
+    // List<String> htmlList = HtmlProcessor.html2List(path);
+    // String htmlSource = "";
+    // for (String line : htmlList) {
+    // htmlSource += line + "\n";
+    // if (line.endsWith("<body>")) {
+    // bodyLocation = htmlSource.length();
+    // }
+
+    // }
+
+    // html_code.setText(htmlSource);
+
+    // webview.getEngine().loadContent(htmlSource);
+
+    // }
+
+    private void loadHtml(String path) throws IOException {
+
+        InputStreamReader streamReader = new InputStreamReader(getClass().getResourceAsStream(path));
+        BufferedReader in = new BufferedReader(streamReader);
+
         String htmlSource = "";
-        for (String line : htmlList) {
+        String line;
+
+        while ((line = in.readLine()) != null) {
             htmlSource += line + "\n";
             if (line.endsWith("<body>")) {
                 bodyLocation = htmlSource.length();
             }
-
         }
 
         html_code.setText(htmlSource);
