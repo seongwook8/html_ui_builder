@@ -28,3 +28,5 @@ This code requires `JavaFX` to run successfully
 - Right click element to do more complex manipulations
 - All changes are made to the source code in real-time
 ![feature image](manipulate.png)
+
+[Link](hub_report.pdf) to the project report
