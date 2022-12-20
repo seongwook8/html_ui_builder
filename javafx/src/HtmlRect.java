@@ -278,6 +278,10 @@ public class HtmlRect extends StackPane {
         this.tag = tag;
     }
 
+    public void setLabel(String label) {
+        this.text.setText(label);
+    }
+
     public int getHSize() {
         return this.hSize;
     }
@@ -326,6 +330,10 @@ public class HtmlRect extends StackPane {
 
     public void setList(List<String> list) {
         this.listElements = new ArrayList<>(list);
+    }
+
+    public Rectangle getRect() {
+        return this.rect;
     }
 
     public void setRect(double width, double height) {

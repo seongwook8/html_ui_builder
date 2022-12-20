@@ -301,7 +301,7 @@ public class HubController {
         try {
             loadHtml("test.html");
         } catch (Exception e) {
-            System.out.println("file not accessible.");~
+            System.out.println("file not accessible.");
         }
     }
 

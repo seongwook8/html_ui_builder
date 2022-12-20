@@ -22,8 +22,11 @@ import javafx.stage.Stage;
 
 public class ChangeContentWindow {
 
+    static String prevTag;
+
     public static void display(HtmlRect rect) {
         List<String> tempList = new ArrayList<>(rect.getList());
+        prevTag = rect.getTag();
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -128,7 +131,7 @@ public class ChangeContentWindow {
                 listview.getSelectionModel().select(index + 1);
             }
         });
-        moveDown.setPrefWidth(50);
+        moveDown.setPrefWidth(55);
 
         HBox row8 = new HBox();
         row8.setAlignment(Pos.CENTER);
@@ -138,14 +141,18 @@ public class ChangeContentWindow {
         Button apply = new Button("Apply");
         apply.setPrefWidth(60);
         apply.setOnAction(e -> {
+            prevTag = rect.getTag();
             rect.setContent(contentText.getText());
             rect.setLegend(legend.getText());
             rect.setSrc(src.getText());
             rect.setList(listElements);
             rect.renderHTMLText();
+            rect.setLabel(rect.getTag());
+
         });
         Button close = new Button("Close");
         close.setOnAction(e -> {
+            rect.setTag(prevTag);
             window.close();
             listElements.clear();
             listElements.addAll(rect.getList());
